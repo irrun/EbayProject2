@@ -44,6 +44,16 @@ object StreamingProc {
       (v1: Int, v2: Int) => v1 + v2, Seconds(60), Seconds(10)
     )
     searchcount.print() // may be write database
+    // here give a example to send http post to user
+    val url = "发送接口地址"
+    val content_type = "application/x-www-form-urlencoded"
+    try{
+      val entity = new UrlEncodedFormEntity(searchcount,"UTF-8")
+      entity.setContentType(content_type)
+      HttpClientUtil.post(url, entity)
+    }catch{
+      case e:Throwable=>e.printStackTrace()
+    }
 
 
     val cpuusage: Double = groupDS.map(_ => {
@@ -55,6 +65,14 @@ object StreamingProc {
     for (tuple <- cpuusage) {
       println("result : " + tuple)
     } // may be write database
+    // here give a example to send http post to user
+    try{
+      val entity = new UrlEncodedFormEntity(cpuusage,"UTF-8")
+      entity.setContentType(content_type)
+      HttpClientUtil.post(url, entity)
+    }catch{
+      case e:Throwable=>e.printStackTrace()
+    }
 
     ssc.start()
     ssc.awaitTermination()
@@ -74,7 +92,7 @@ object StreamingProc {
 
   def getKafkaParams(): Map[String, Object] = {
     Map[String, Object](
-      "bootstrap.servers" -> "ipAddress1:port, ipAddress2:port, ipAddress3:port",
+      "bootstrap.servers" -> "ipAddress1:port, ipAddress2:port, ipAddress3:port.....",
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],
       "group.id" -> "consumer-group",
